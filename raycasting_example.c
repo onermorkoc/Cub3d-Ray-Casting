@@ -1,7 +1,7 @@
 /*
 => Bu klavuz kimler için:
 
-Minilibx kütüphanesinin nasıl çalıştığını bilenler ve elbette cub3d pdf okuyanlar için :)
+Minilibx kütüphanesinin nasıl çalıştığını bilenler ve elbette cub3d pdf okuyanlar için
 
 => Not:
 
