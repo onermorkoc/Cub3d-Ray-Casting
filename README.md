@@ -1,1 +1,1 @@
-# Cub3d-Ray-Casting-Turkce-Klavuz
+# Cub3d-Ray-Casting
