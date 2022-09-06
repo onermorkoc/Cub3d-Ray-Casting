@@ -26,7 +26,8 @@ Oyunucunun konumundan sag ve sol iki vektör(ışın) yolluyoruz( \./ ) bu iki �
 
 => Derleme:
 
-gcc raycasting_example.c libmlx_os.a -lXext -lX11 -lm -lz
+Linux: gcc raycasting_example.c libmlx_linux.a -lXext -lX11 -lm -lz
+Macos: gcc raycasting_example.c libmlx_macos.a -framework OpenGL -framework AppKit
 
 =>Önemli bağlantılar:
 
@@ -237,7 +238,7 @@ int	print_map(t_data *s_data)
 		*/
 		
 		/*
-		Eger color basmak istiyorsanız 243 den 267 kadar yorum satırına alın ve 270 satırıda yorum satırı yapıp yukardakı color basma yorum satırlarını
+		Eger color basmak istiyorsanız 245 den 269 kadar yorum satırına alın ve 272 satırıda yorum satırı yapıp yukardakı color basma yorum satırlarını
 		acınız aynı sekıl tavan ve zemın ıcınde uygulayın
 		*/
 
@@ -343,7 +344,7 @@ void zemin_renk(t_data *s_data)
 
 int	key_press(int key, t_data *s_data)
 {
-	printf("Key code: %d\n", key);
+	printf("Key code: %d\n", key); //macosa linuxsa göre if'leri editleyin
 
 	if (key == 65362) // ileri tuşu
 	{
