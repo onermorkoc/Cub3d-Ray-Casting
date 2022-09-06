@@ -360,7 +360,7 @@ int	key_press(int key, t_data *s_data)
 		if (!worldMap[(int)(s_data->posX)][(int)(s_data->posY - s_data->dirY * s_data->moveSpeed)])
 			s_data->posY -= s_data->dirY * s_data->moveSpeed;
 	}
-	if (key == 65363) //sağ
+	if (key == 65363) //camera sağ
 	{
 		double oldDirX = s_data->dirX;
 		s_data->dirX = s_data->dirX * cos(-s_data->rotSpeed) - s_data->dirY * sin(-s_data->rotSpeed);
@@ -369,7 +369,7 @@ int	key_press(int key, t_data *s_data)
 		s_data->planeX = s_data->planeX * cos(-s_data->rotSpeed) - s_data->planeY * sin(-s_data->rotSpeed);
 		s_data->planeY = oldPlaneX * sin(-s_data->rotSpeed) + s_data->planeY * cos(-s_data->rotSpeed);
 	}
-	if (key == 65361) //sol
+	if (key == 65361) //camera sol
 	{
 		double oldDirX = s_data->dirX;
 		s_data->dirX = s_data->dirX * cos(s_data->rotSpeed) - s_data->dirY * sin(s_data->rotSpeed);
@@ -378,8 +378,6 @@ int	key_press(int key, t_data *s_data)
 		s_data->planeX = s_data->planeX * cos(s_data->rotSpeed) - s_data->planeY * sin(s_data->rotSpeed);
 		s_data->planeY = oldPlaneX * sin(s_data->rotSpeed) + s_data->planeY * cos(s_data->rotSpeed);
 	}
-	if (key == 65307) //esc
-		exit(0);
 	
 	// Her haraket ettiğinde ekranı sil tekrandan tavan zemini ve güncellenmiş haritayı bas
 	mlx_clear_window(s_data->mlx_ptr, s_data->win_ptr);
