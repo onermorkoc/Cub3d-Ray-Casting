@@ -122,23 +122,27 @@ int	print_map(t_data *s_data)
 		*/
 		double cameraX = 2 * x / (double)width -1;
 
-		// rayDirX ve rayDirY bizim ışınlarımız
+		// rayDirX ve rayDirY bizim ışınlarımızın yönünü temsil eder
 		double rayDirX = s_data->dirX + s_data->planeX * cameraX;
 		double rayDirY = s_data->dirY + s_data->planeY * cameraX;
 		
 		/*
-		mapX ve mapY ışının bulunduğu konumudur ışın ilerledikçe degerini güncellicez ve hemen ardından ışının bulunduğu konum duvar mı degıl mı bakıcaz. 
-		Eger duvarsa demekkı ışın duvara çarpmıştır. Peki neden ilk değeri oyuncunun konumudur çükü ışınları oyuncunun kodunumdan gönderiyoruz
+		mapX ve mapY ışının bulunduğu konumudur. Işın ilerledikçe değerini güncelliyoruz (ışınnın ilerlediği yöne göre ya değeri +1 artacak yada -1 (ışın demekki ters yöne doğru gidiyor) azalacak)
+		ve hemen ardından ışının bulunduğu konum duvar mı değil mi bakıcaz. Eger duvarsa demekkı ışın duvara çarpmıştır. Peki neden ilk değeri oyuncunun konumudur çükü ışınları oyuncunun kodunumdan 
+		itibaren gönderiyoruz
 		*/
 		int mapX = (int)s_data->posX;
 		int mapY = (int)s_data->posY;
 
-		//sideDistX ve sideDistY ışının ilk çarptığı x ve y cizgilerin arasındaki uzaklıkğı temsil eder(raycastdelta.jpg inceleyin).Değeri ileride hesaplanılacak
+		/*
+		sideDistX ve sideDistY başlangıçta ışının ilk çarptığı x ve y çizgilerin arasındaki uzaklıkğı temsil eder (raycastdelta.jpg inceleyin). Daha sonra ışın duvara çarpana kadar
+		sürekli değeri += deltaDist olarak güncelleniyor. Işın duvara çarptıktan sonra sideDistler ışının uzunluğunu temsil ediyor
+		*/
 		double sideDistX;
 		double sideDistY;
 		
 		/*
-		deltaDistX ve deltaDistY ise sideDist' nin devamı gibi düşünebilirz ışının x ve y cizgilerine çartıgının(yani sideDist) 
+		deltaDistX ve deltaDistY ise sideDist' nin devamı gibi düşünebilirz ışının x ve y cizgilerine çartığının(yani sideDist) 
 		1 sonraki x ve y cizgilerine çartığı mesafedir.(raycastdelta.jpg inceleyin) harita kare olduğundan ışınlar çapraz çapraz
 		gittiğinden dolayı uzunlugu bulmak için üçgen çizilir ve pisagor ile ışının uzunlugu bulunur lakin bu sadeleşip
 		fabs(1/ ışınınX_ekseni) olmuştur abs fonksiyonu mutlak değer hesaplar fabs ise double değerler için mutlak değer hesaplar.
@@ -146,7 +150,7 @@ int	print_map(t_data *s_data)
 		double deltaDistX = fabs(1 / rayDirX);
 		double deltaDistY = fabs(1 / rayDirY);
 
-		//perpWallDist oyuncunun konumdan duvara kadar olan uzaklık için kullanıcaz
+		//perpWallDist oyuncunun konumdan dik duvara olan mesafeyi temsil eder
 		double perpWallDist;
 		
 		/*
@@ -161,12 +165,12 @@ int	print_map(t_data *s_data)
 
 		if (rayDirX < 0) // eğer x ışını - li yönde ise
 		{
-			stepX = -1; //stepX degeri -1
+			stepX = -1; //stepX degeri -1 demekki ışın negatif yöne göre ilerliyor
 			sideDistX = (s_data->posX - mapX) * deltaDistX;
 		}
 		else
 		{
-			stepX = 1; // değilse + 1 dir
+			stepX = 1; // değilse + 1 dir demekki ışın pozitif yöne göre ilerliyor
 			sideDistX = (mapX + 1.0 - s_data->posX) * deltaDistX;
 		}
 		if (rayDirY < 0) //eğer y ışını - li yönde ise
@@ -185,7 +189,7 @@ int	print_map(t_data *s_data)
 			if (sideDistX < sideDistY)
 			{
 				sideDistX += deltaDistX;  //duvara çarpmadıgı vakıtce ışının uzunluguna sürekli deltadist ekle
-				mapX += stepX; // duvara carpmadıkca ısının konumu hep +1 veya -1 eklenıyor (ışının - li yöndede olabilir örnek x,y => (-2, -5))
+				mapX += stepX; // duvara carpmadıkca ısının konumu hep +1 veya -1 eklenıyor (ışının ilerlediği yöne göre)
 				side = 0;  //ışın x-taraflı duvara çarptı
 			}
 			else
@@ -201,7 +205,7 @@ int	print_map(t_data *s_data)
 			if (worldMap[mapX][mapY] > 0)
 				hit = 1; // duvara çarptı degeri 1 yap döngüyü kır
 		}
-		if (side == 0) //burada duvar ile oyunun arasındakı uzaklıgı hesaplanıyor x taraflı duvar carptıysa ayrı y taraflı duvara carptıysa ayrı hesaplanıyor
+		if (side == 0) //burada duvar ile oyunun arasındakı dik uzaklıgı hesaplanıyor x taraflı duvar carptıysa ayrı y taraflı duvara carptıysa ayrı hesaplanıyor
 			perpWallDist = (mapX - s_data->posX + (1 - stepX) / 2) / rayDirX;
 		else
 			perpWallDist = (mapY - s_data->posY + (1 - stepY) / 2) / rayDirY;
@@ -238,8 +242,11 @@ int	print_map(t_data *s_data)
 		*/
 		
 		/*
-		Eger color basmak istiyorsanız 245 den 269 kadar yorum satırına alın ve 272 satırıda yorum satırı yapıp yukardakı color basma yorum satırlarını
+		Eger color basmak istiyorsanız 252 den 276 kadar yorum satırına alın ve 279 satırıda yorum satırı yapıp yukardakı color basma yorum satırlarını
 		acınız aynı sekıl tavan ve zemın ıcınde uygulayın
+		
+		Not: Color basmada mlx_pixel_put ile oluşturulan pencerin tek tek pixel basarken, resim basmalı yöntemde ise ekran pencere boyutu kadar içi
+		bos resim oluşturup bu resmin pixelleri dolduruyoruz daha sonra oluşturdugumuz resmi x = 0, y = 0 konumuna basıyoruz
 		*/
 
 		int texNum = worldMap[mapX][mapY];  // duvarın yönü bu örnekte numaralar ile duvarların yönü belirlenmiş ama cub3d projesinde harfler ile belirlenmiştir
@@ -379,7 +386,7 @@ int	key_press(int key, t_data *s_data)
 		s_data->planeY = oldPlaneX * sin(s_data->rotSpeed) + s_data->planeY * cos(s_data->rotSpeed);
 	}
 	
-	// Her haraket ettiğinde ekranı sil tekrandan tavan zemini ve güncellenmiş haritayı bas
+	// Her haraket ettiğinde ekranı sil tekrandan tavan, zemini ve güncellenmiş haritayı bas
 	mlx_clear_window(s_data->mlx_ptr, s_data->win_ptr);
 	tavan_renk(s_data);
 	zemin_renk(s_data);
