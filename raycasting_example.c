@@ -32,7 +32,7 @@ Macos: gcc raycasting_example.c libmlx_macos.a -framework OpenGL -framework AppK
 =>Önemli bağlantılar:
 
 https://lodev.org/cgtutor/raycasting.html  Ray casting kütüphanesi hakkında makale (buradaki yazdığım herseyi oradan baz alarak yazdım)
-https://github.com/keuhdall/images_example Minilibxde boş resim oluşturma ve içindeki pixelleri nasıl doldurulduğunu gösteren klavuz
+https://github.com/onermorkoc/Minilibx-Kutuphanesi Minilibxde boş resim oluşturma ve içindeki pixelleri nasıl doldurulduğunu gösteren klavuz (example04 ve example05 inceleyin)
 
 */
 
